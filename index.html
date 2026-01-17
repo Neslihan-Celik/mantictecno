@@ -19,10 +19,19 @@
     body { background: var(--dark); color: #fff; line-height: 1.6; overflow-x: hidden; }
     a { text-decoration: none; color: inherit; transition: 0.3s; }
 
+    /* --- BACKGROUND CANVAS --- */
+    #bg-canvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: -1;
+      background: radial-gradient(circle at center, #0f1a12 0%, #0b0f0c 100%);
+    }
+
     /* --- NAVIGATION --- */
     header {
       position: sticky; top: 0; z-index: 100;
-      background: rgba(11, 15, 12, 0.9);
+      background: rgba(11, 15, 12, 0.8);
       backdrop-filter: blur(12px);
       border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     }
@@ -39,9 +48,8 @@
     .hero {
       min-height: 90vh;
       display: flex; align-items: center;
-      background: 
-        radial-gradient(circle at 80% 20%, rgba(22, 163, 74, 0.15), transparent 40%),
-        radial-gradient(circle at 10% 80%, rgba(22, 163, 74, 0.1), transparent 40%);
+      /* Arka plan gradyanı tuvalle birleşmesi için hafifletildi */
+      background: radial-gradient(circle at 80% 20%, rgba(22, 163, 74, 0.1), transparent 40%);
     }
     .hero-inner {
       max-width: var(--container-max); margin: auto; padding: 40px 24px;
@@ -58,14 +66,15 @@
       transition: 0.3s transform, 0.3s box-shadow; text-align: center;
     }
     .btn:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(22, 163, 74, 0.3); }
-    .btn.alt { background: transparent; color: #fff; border: 1px solid var(--green); }
+    .btn.alt { background: transparent; color: #fff; border: 1px solid var(--green); backdrop-filter: blur(5px); }
 
     .mantis {
       width: 100%; aspect-ratio: 1/1; border-radius: 30px;
-      background: linear-gradient(160deg, #03140c, #020a06);
+      background: linear-gradient(160deg, rgba(3, 20, 12, 0.8), rgba(2, 10, 6, 0.9));
       display: grid; place-items: center;
-      box-shadow: 0 30px 80px rgba(22, 163, 74, 0.2);
+      box-shadow: 0 30px 80px rgba(22, 163, 74, 0.1);
       position: relative;
+      border: 1px solid rgba(22, 163, 74, 0.2);
     }
 
     .mantis-emoji {
@@ -81,7 +90,7 @@
     }
 
     /* --- SECTIONS GENERAL --- */
-    section { padding: 100px 24px; }
+    section { padding: 100px 24px; position: relative; }
     .container { max-width: var(--container-max); margin: auto; }
     .section-title { text-align: center; margin-bottom: 60px; }
     .section-title h2 { font-size: clamp(28px, 4vw, 40px); font-weight: 800; color: var(--green); }
@@ -92,21 +101,23 @@
     .grid-3 { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
     
     .card {
-      background: #0f1511; border-radius: 20px; padding: 40px;
+      background: rgba(15, 21, 17, 0.7); border-radius: 20px; padding: 40px;
       border: 1px solid rgba(255, 255, 255, 0.05);
-      transition: 0.3s;
+      backdrop-filter: blur(10px);
+      transition: 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
     }
-    .card:hover { transform: translateY(-8px); border-color: var(--green); }
+    .card:hover { transform: translateY(-8px); border-color: var(--green); background: rgba(22, 163, 74, 0.05); }
     .card h3 { margin-bottom: 15px; font-size: 22px; color: #fff; }
     .card p { color: #9ca3af; font-size: 16px; }
 
     /* --- STEP CARDS --- */
     .automation-steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
     .step-card {
-      background: #111; border-left: 4px solid var(--green); border-radius: 20px; padding: 30px;
+      background: rgba(17, 17, 17, 0.8); border-left: 4px solid var(--green); border-radius: 20px; padding: 30px;
       transition: 0.3s; height: 100%; display: flex; flex-direction: column; justify-content: space-between;
+      backdrop-filter: blur(5px);
     }
-    .step-card:hover { background: #161a17; }
+    .step-card:hover { background: rgba(22, 26, 23, 0.9); }
     .step-number { font-size: 45px; font-weight: 800; color: rgba(34, 197, 94, 0.1); line-height: 1; }
     .step-image img { width: 120px; margin: 20px auto 0; animation: float 3s ease-in-out infinite; }
 
@@ -120,7 +131,7 @@
     .slide-track { display: flex; gap: 30px; width: max-content; animation: scroll-left 40s linear infinite; }
     @keyframes scroll-left { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
     .logo-box {
-      min-width: 200px; height: 100px; background: #0f1511; border-radius: 16px;
+      min-width: 200px; height: 100px; background: rgba(15, 21, 17, 0.8); border-radius: 16px;
       display: grid; place-items: center; border: 1px solid rgba(22, 163, 74, 0.2);
       font-weight: 600; color: var(--gray); transition: 0.3s;
     }
@@ -130,14 +141,14 @@
     form { max-width: 800px; margin: auto; display: grid; gap: 20px; }
     .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
     input, select, textarea {
-      width: 100%; padding: 16px; border-radius: 12px; background: #0f1511;
+      width: 100%; padding: 16px; border-radius: 12px; background: rgba(15, 21, 17, 0.8);
       border: 1px solid rgba(255, 255, 255, 0.1); color: #fff; font-size: 15px; outline: none;
     }
     input:focus, textarea:focus { border-color: var(--green); }
     .form-note { font-size: 13px; color: var(--gray); text-align: center; }
 
     /* --- FOOTER --- */
-    footer { padding: 80px 24px; background: #080c09; border-top: 1px solid rgba(255, 255, 255, 0.05); }
+    footer { padding: 80px 24px; background: rgba(8, 12, 9, 0.95); border-top: 1px solid rgba(255, 255, 255, 0.05); }
     .footer-grid {
       max-width: var(--container-max); margin: auto;
       display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 50px;
@@ -161,15 +172,11 @@
       .form-grid { grid-template-columns: 1fr; }
       section { padding: 60px 24px; }
     }
-
-    @media (max-width: 480px) {
-      .footer-grid { grid-template-columns: 1fr; text-align: center; }
-      .logo { font-size: 20px; }
-      .btn { width: 100%; }
-    }
   </style>
 </head>
 <body>
+
+<canvas id="bg-canvas"></canvas>
 
 <header>
   <nav class="nav">
@@ -335,6 +342,91 @@
     © 2026 Mantis Tecno. Tüm hakları saklıdır.
   </div>
 </footer>
+
+<script>
+    // --- MANTIS PLEXUS ANIMATION ---
+    const canvas = document.getElementById('bg-canvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    const mouse = { x: null, y: null, radius: 150 };
+
+    window.addEventListener('mousemove', (e) => {
+      mouse.x = e.x;
+      mouse.y = e.y;
+    });
+
+    class Particle {
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 2 + 1;
+        this.vx = (Math.random() - 0.5) * 0.4;
+        this.vy = (Math.random() - 0.5) * 0.4;
+      }
+      update() {
+        this.x += this.vx;
+        this.y += this.vy;
+
+        if (this.x > canvas.width || this.x < 0) this.vx *= -1;
+        if (this.y > canvas.height || this.y < 0) this.vy *= -1;
+
+        // Mouse avoidance logic
+        let dx = mouse.x - this.x;
+        let dy = mouse.y - this.y;
+        let distance = Math.sqrt(dx*dx + dy*dy);
+        if (distance < mouse.radius) {
+          if (mouse.x < this.x && this.x < canvas.width - 10) this.x += 2;
+          if (mouse.x > this.x && this.x > 10) this.x -= 2;
+          if (mouse.y < this.y && this.y < canvas.height - 10) this.y += 2;
+          if (mouse.y > this.y && this.y > 10) this.y -= 2;
+        }
+      }
+      draw() {
+        ctx.fillStyle = 'rgba(22, 163, 74, 0.4)'; // Mantis Yeşili
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    function init() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      particles = [];
+      let count = (canvas.width * canvas.height) / 10000;
+      for (let i = 0; i < count; i++) {
+        particles.push(new Particle());
+      }
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (let i = 0; i < particles.length; i++) {
+        particles[i].update();
+        particles[i].draw();
+
+        for (let j = i; j < particles.length; j++) {
+          let dx = particles[i].x - particles[j].x;
+          let dy = particles[i].y - particles[j].y;
+          let distance = Math.sqrt(dx*dx + dy*dy);
+
+          if (distance < 150) {
+            ctx.strokeStyle = `rgba(22, 163, 74, ${0.2 - distance/750})`; // Bağlantı çizgileri
+            ctx.lineWidth = 0.5;
+            ctx.beginPath();
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.stroke();
+          }
+        }
+      }
+      requestAnimationFrame(animate);
+    }
+
+    window.addEventListener('resize', init);
+    init();
+    animate();
+</script>
 
 </body>
 </html>
