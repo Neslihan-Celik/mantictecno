@@ -19,7 +19,7 @@
     body { background: var(--dark); color: #fff; line-height: 1.6; overflow-x: hidden; }
     a { text-decoration: none; color: inherit; transition: 0.3s; }
 
-    /* --- BACKGROUND CANVAS --- */
+    /* --- BACKGROUND CANVAS (PLEXUS) --- */
     #bg-canvas {
       position: fixed;
       top: 0; left: 0;
@@ -48,12 +48,12 @@
     .hero {
       min-height: 90vh;
       display: flex; align-items: center;
-      /* Arka plan gradyanı tuvalle birleşmesi için hafifletildi */
-      background: radial-gradient(circle at 80% 20%, rgba(22, 163, 74, 0.1), transparent 40%);
+      position: relative;
     }
     .hero-inner {
       max-width: var(--container-max); margin: auto; padding: 40px 24px;
-      display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 60px; align-items: center;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center;
+      z-index: 2; /* İçerik önde olmalı */
     }
     .hero h1 { font-size: clamp(32px, 5vw, 56px); line-height: 1.1; font-weight: 800; }
     .hero h1 span { color: var(--green); }
@@ -63,31 +63,42 @@
     .btn {
       display: inline-block; padding: 16px 32px; border-radius: 12px;
       background: var(--green); color: #052e16; font-weight: 700;
-      transition: 0.3s transform, 0.3s box-shadow; text-align: center;
+      transition: 0.3s transform, 0.3s box-shadow; text-align: center; border: none; cursor: pointer;
     }
     .btn:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(22, 163, 74, 0.3); }
     .btn.alt { background: transparent; color: #fff; border: 1px solid var(--green); backdrop-filter: blur(5px); }
 
-    .mantis {
-      width: 100%; aspect-ratio: 1/1; border-radius: 30px;
-      background: linear-gradient(160deg, rgba(3, 20, 12, 0.8), rgba(2, 10, 6, 0.9));
-      display: grid; place-items: center;
-      box-shadow: 0 30px 80px rgba(22, 163, 74, 0.1);
-      position: relative;
-      border: 1px solid rgba(22, 163, 74, 0.2);
+    /* --- MANTIS VISUAL & AURA --- */
+    .mantis-hero-box { 
+      position: relative; 
+      display: flex; 
+      justify-content: center; 
+      align-items: center; 
+      width: 100%; /* Kutuya genişlik ver */
+      height: 450px; /* Kutuya yükseklik ver, resim daha iyi ortalansın */
+    }
+    .mantis-aura {
+      position: absolute; 
+      width: 450px; 
+      height: 450px;
+      background: radial-gradient(circle, rgba(22, 163, 74, 0.25) 0%, transparent 70%);
+      border-radius: 50%; 
+      z-index: 1; /* Aura, resmin arkasında olmalı */
+      animation: aura-pulse 4s ease-in-out infinite;
+    }
+    .mantis-img {
+      position: relative; /* Aura'nın üzerinde olması için */
+      width: 100%; /* Konteynerının %100'ünü kapla */
+      max-width: 500px; /* Maksimum genişlik */
+      height: auto; /* Oranı koru */
+      object-fit: contain; /* Görselin boyutunu bozmadan konteyner içinde kalmasını sağla */
+      z-index: 2; /* Resim aura'nın üzerinde olmalı */
+      filter: drop-shadow(0 0 30px rgba(22, 163, 74, 0.6)); /* Gölge daha belirgin */
+      animation: mantis-float 5s ease-in-out infinite;
     }
 
-    .mantis-emoji {
-      font-size: clamp(100px, 15vw, 180px);
-      filter: grayscale(1) brightness(0.8) contrast(1.5) drop-shadow(0 0 20px rgba(22, 163, 74, 0.4));
-      animation: emoji-breathe 5s ease-in-out infinite;
-      user-select: none;
-    }
-
-    @keyframes emoji-breathe {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.05); }
-    }
+    @keyframes mantis-float { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-25px) scale(1.03); } }
+    @keyframes aura-pulse { 0%, 100% { transform: scale(1); opacity: 0.5; } 50% { transform: scale(1.2); opacity: 0.8; } }
 
     /* --- SECTIONS GENERAL --- */
     section { padding: 100px 24px; position: relative; }
@@ -98,12 +109,11 @@
 
     /* --- GRID & CARDS --- */
     .grid { display: grid; gap: 24px; }
-    .grid-3 { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+    .grid-3 { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
     
     .card {
       background: rgba(15, 21, 17, 0.7); border-radius: 20px; padding: 40px;
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px);
       transition: 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
     }
     .card:hover { transform: translateY(-8px); border-color: var(--green); background: rgba(22, 163, 74, 0.05); }
@@ -111,7 +121,6 @@
     .card p { color: #9ca3af; font-size: 16px; }
 
     /* --- STEP CARDS --- */
-    .automation-steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
     .step-card {
       background: rgba(17, 17, 17, 0.8); border-left: 4px solid var(--green); border-radius: 20px; padding: 30px;
       transition: 0.3s; height: 100%; display: flex; flex-direction: column; justify-content: space-between;
@@ -119,58 +128,38 @@
     }
     .step-card:hover { background: rgba(22, 26, 23, 0.9); }
     .step-number { font-size: 45px; font-weight: 800; color: rgba(34, 197, 94, 0.1); line-height: 1; }
-    .step-image img { width: 120px; margin: 20px auto 0; animation: float 3s ease-in-out infinite; }
+    .step-image img { width: 100px; margin: 20px auto 0; filter: invert(1) brightness(2); }
 
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
-    }
-
-    /* --- SLIDER --- */
+    /* --- LOGO SLIDER --- */
     .slider-wrapper { overflow: hidden; padding: 20px 0; }
-    .slide-track { display: flex; gap: 30px; width: max-content; animation: scroll-left 40s linear infinite; }
+    .slide-track { display: flex; gap: 30px; width: max-content; animation: scroll-left 30s linear infinite; }
     @keyframes scroll-left { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
     .logo-box {
-      min-width: 200px; height: 100px; background: rgba(15, 21, 17, 0.8); border-radius: 16px;
-      display: grid; place-items: center; border: 1px solid rgba(22, 163, 74, 0.2);
-      font-weight: 600; color: var(--gray); transition: 0.3s;
+      min-width: 180px; height: 90px; background: rgba(15, 21, 17, 0.8); border-radius: 16px;
+      display: grid; place-items: center; border: 1px solid rgba(22, 163, 74, 0.15);
+      font-weight: 600; color: var(--gray);
     }
-    .logo-box:hover { border-color: var(--green); color: #fff; }
 
     /* --- CONTACT FORM --- */
     form { max-width: 800px; margin: auto; display: grid; gap: 20px; }
     .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
     input, select, textarea {
-      width: 100%; padding: 16px; border-radius: 12px; background: rgba(15, 21, 17, 0.8);
-      border: 1px solid rgba(255, 255, 255, 0.1); color: #fff; font-size: 15px; outline: none;
+      width: 100%; padding: 18px; border-radius: 12px; background: rgba(15, 21, 17, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.1); color: #fff; outline: none; transition: 0.3s;
     }
-    input:focus, textarea:focus { border-color: var(--green); }
-    .form-note { font-size: 13px; color: var(--gray); text-align: center; }
+    input:focus, textarea:focus { border-color: var(--green); background: rgba(22, 163, 74, 0.05); }
 
     /* --- FOOTER --- */
-    footer { padding: 80px 24px; background: rgba(8, 12, 9, 0.95); border-top: 1px solid rgba(255, 255, 255, 0.05); }
-    .footer-grid {
-      max-width: var(--container-max); margin: auto;
-      display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 50px;
-    }
-    .footer-title { color: #fff; font-weight: 700; margin-bottom: 20px; font-size: 18px; }
-    .footer-item { font-size: 14px; margin-bottom: 12px; color: var(--gray); }
-    .footer-item a:hover { color: var(--green); }
+    footer { padding: 80px 24px; background: rgba(8, 12, 9, 0.98); border-top: 1px solid rgba(255, 255, 255, 0.05); }
+    .footer-grid { max-width: var(--container-max); margin: auto; display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 50px; }
 
-    /* --- RESPONSIVE MEDIA QUERIES --- */
     @media (max-width: 992px) {
-      .hero-inner { grid-template-columns: 1fr; text-align: center; gap: 40px; }
-      .hero p { margin-left: auto; margin-right: auto; }
-      .btn-group { justify-content: center; }
-      .mantis { max-width: 400px; margin: auto; }
-      .footer-grid { grid-template-columns: 1fr 1fr; }
-    }
-
-    @media (max-width: 768px) {
-      .nav { flex-direction: column; gap: 20px; }
-      .nav ul { gap: 15px; flex-wrap: wrap; justify-content: center; }
+      .hero-inner { grid-template-columns: 1fr; text-align: center; }
+      .mantis-hero-box { max-width: 400px; margin: auto; height: 350px; } /* Mobil için boyut ayarı */
+      .mantis-aura { width: 350px; height: 350px; } /* Mobil için aura boyutu */
+      .mantis-img { max-width: 350px; } /* Mobil için resim boyutu */
       .form-grid { grid-template-columns: 1fr; }
-      section { padding: 60px 24px; }
+      .footer-grid { grid-template-columns: 1fr; text-align: center; }
     }
   </style>
 </head>
@@ -195,14 +184,71 @@
     <div class="hero-inner">
       <div class="hero-content">
         <h1>İşletmeniz için <span>akıllı otomasyon</span> çözümleri</h1>
-        <p>Kahve, çay, yiyecek–içecek ve endüstriyel otomasyon cihazlarında; keşif, kurulum, destek ve sürdürülebilir teknoloji hizmetleri.</p>
+        <p>Kahve, çay ve endüstriyel otomasyon cihazlarında; keşif, kurulum ve yapay zeka destekli teknik servis hizmetleri.</p>
         <div class="btn-group">
           <a href="#contact" class="btn">Teklif Al</a>
           <a href="#services" class="btn alt">Hizmetlerimiz</a>
         </div>
       </div>
-      <div class="mantis">
-        <div class="mantis-emoji" aria-label="metallic mantis">🦗</div>
+      <div class="mantis-hero-box">
+        <div class="man<img src="https://www.freeiconspng.com/thumbs/mantis-png/mantis-png-15.png" alt="Mantis" class="mantis-img">tis-aura"></div>
+        <div class="mantis-video-wrapper">
+          <div class="video-overlay-glow"></div>
+          <video autoplay muted loop playsinline class="mantis-main-video">
+              <source src="assets/mantis.mp4" type="video/mp4">
+              Tarayıcınız video oynatmayı desteklemiyor.
+          </video>
+      </div>
+      
+      <style>
+          .mantis-video-wrapper {
+              position: relative;
+              width: 100%;
+              max-width: 550px;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              z-index: 2;
+          }
+      
+          .mantis-main-video {
+              width: 100%;
+              height: auto;
+              border-radius: 24px; /* Modern yuvarlatılmış köşeler */
+              box-shadow: 0 0 40px rgba(22, 163, 74, 0.3); /* Dış yeşil ışıma */
+              filter: contrast(1.1) brightness(1.1); /* Videoyu daha canlı yapar */
+              animation: mantis-float 6s ease-in-out infinite;
+              z-index: 3;
+          }
+      
+          .video-overlay-glow {
+              position: absolute;
+              width: 110%;
+              height: 110%;
+              background: radial-gradient(circle, rgba(22, 163, 74, 0.2) 0%, transparent 70%);
+              animation: pulse-aura 4s ease-in-out infinite;
+              z-index: 1;
+          }
+      
+          /* Video için süzülme efekti */
+          @keyframes mantis-float {
+              0%, 100% { transform: translateY(0) scale(1); }
+              50% { transform: translateY(-15px) scale(1.02); }
+          }
+      
+          /* Arkadaki ışık patlaması */
+          @keyframes pulse-aura {
+              0%, 100% { transform: scale(1); opacity: 0.4; }
+              50% { transform: scale(1.2); opacity: 0.7; }
+          }
+      
+          @media (max-width: 768px) {
+              .mantis-video-wrapper {
+                  max-width: 90%;
+                  margin: 20px auto;
+              }
+          }
+      </style>
       </div>
     </div>
   </section>
@@ -210,21 +256,21 @@
   <section id="services">
     <div class="container">
       <div class="section-title">
-        <h2>Hizmetlerimiz</h2>
-        <p>Kurumsal firmalara uçtan uca otomasyon çözümleri</p>
+        <h2>Uçtan Uca Hizmetler</h2>
+        <p>Teknolojiyi iş süreçlerinize entegre ediyoruz</p>
       </div>
       <div class="grid grid-3">
         <div class="card">
-          <h3>Keşif & Danışmanlık</h3>
-          <p>İhtiyacınıza uygun otomasyon sistemini belirleriz.</p>
+          <h3>Keşif & Strateji</h3>
+          <p>İşletme hacminize göre en verimli cihaz ve otomasyon planlamasını profesyonel ekiplerimizle yapıyoruz.</p>
         </div>
         <div class="card">
-          <h3>Kurulum & Entegrasyon</h3>
-          <p>Cihazların profesyonel kurulumu ve test süreçleri.</p>
+          <h3>Akıllı Kurulum</h3>
+          <p>Cihazların IoT entegrasyonu ve merkezi yönetim sistemine bağlanması süreçlerini anahtar teslim yönetiyoruz.</p>
         </div>
         <div class="card">
-          <h3>Teknik Destek</h3>
-          <p>Sürekli bakım, arıza ve yedek parça hizmetleri.</p>
+          <h3>AI Destekli Bakım</h3>
+          <p>Arızaları oluşmadan tahmin eden yapay zeka sistemlerimizle operasyonunuzu kesintisiz sürdürüyoruz.</p>
         </div>
       </div>
     </div>
@@ -233,31 +279,31 @@
   <section id="devices">
     <div class="container">
       <div class="section-title">
-        <h2>Otomasyon Cihazlarımız</h2>
-        <p>Yapay zeka destekli, kurulumdan yönetime kadar uçtan uca otomasyon çözümleri</p>
+        <h2>Çözüm Alanlarımız</h2>
+        <p>Endüstriyel standartlarda güvenilir teknoloji</p>
       </div>
-      <div class="automation-steps">
+      <div class="grid grid-3">
         <div class="step-card">
           <div>
             <div class="step-number">01</div>
-            <h3 style="color:var(--green); margin: 15px 0;">Kahve & Sıcak İçecek</h3>
-            <p>Endüstriyel makineler işletmenize özel yapılandırılır. Veriler merkezi sistemden izlenir.</p>
+            <h3 style="color:var(--green); margin: 15px 0;">Sıcak İçecek</h3>
+            <p>Yüksek kapasiteli espresso ve çay otomasyon makineleri.</p>
           </div>
           <div class="step-image"><img src="https://cdn-icons-png.flaticon.com/512/924/924514.png" alt="Coffee"></div>
         </div>
         <div class="step-card">
           <div>
             <div class="step-number">02</div>
-            <h3 style="color:var(--green); margin: 15px 0;">Soğuk İçecek & Satış</h3>
-            <p>Stok seviyesi ve satış yoğunluğu otomatik olarak raporlanır, müdahale süresi kısalır.</p>
+            <h3 style="color:var(--green); margin: 15px 0;">Vending Sistemler</h3>
+            <p>Akıllı ödeme sistemli otomat çözümleri ve stok takibi.</p>
           </div>
           <div class="step-image"><img src="https://cdn-icons-png.flaticon.com/512/2722/2722527.png" alt="Vending"></div>
         </div>
         <div class="step-card">
           <div>
             <div class="step-number">03</div>
-            <h3 style="color:var(--green); margin: 15px 0;">Merkezi Yönetim (AI)</h3>
-            <p>Tüm cihazlar tek panelden izlenir. Yapay zeka ile maliyet düşürülür, verimlilik artırılır.</p>
+            <h3 style="color:var(--green); margin: 15px 0;">Merkezi Yönetim</h3>
+            <p>Tüm cihazların performansını tek ekrandan izleme ve AI raporlama.</p>
           </div>
           <div class="step-image"><img src="https://cdn-icons-png.flaticon.com/512/2103/2103633.png" alt="AI Control"></div>
         </div>
@@ -268,21 +314,20 @@
   <section id="clients">
     <div class="container">
       <div class="section-title">
-        <h2>Çalıştığımız Firmalar</h2>
-        <p>Uzun soluklu iş ortaklıkları</p>
+        <h2>Referanslarımız</h2>
       </div>
       <div class="slider-wrapper">
         <div class="slide-track">
-          <div class="logo-box">Firma A</div>
-          <div class="logo-box">Firma B</div>
-          <div class="logo-box">Firma C</div>
-          <div class="logo-box">Firma D</div>
-          <div class="logo-box">Firma E</div>
-          <div class="logo-box">Firma A</div>
-          <div class="logo-box">Firma B</div>
-          <div class="logo-box">Firma C</div>
-          <div class="logo-box">Firma D</div>
-          <div class="logo-box">Firma E</div>
+          <div class="logo-box">Sodexo</div>
+          <div class="logo-box">Starbucks</div>
+          <div class="logo-box">Nestlé Professional</div>
+          <div class="logo-box">Compass Group</div>
+          <div class="logo-box">Shell</div>
+          <div class="logo-box">Sodexo</div>
+          <div class="logo-box">Starbucks</div>
+          <div class="logo-box">Nestlé Professional</div>
+          <div class="logo-box">Compass Group</div>
+          <div class="logo-box">Shell</div>
         </div>
       </div>
     </div>
@@ -291,28 +336,22 @@
   <section id="contact">
     <div class="container">
       <div class="section-title">
-        <h2>İletişim</h2>
-        <p>Bizimle hemen iletişime geçin</p>
+        <h2>Bize Ulaşın</h2>
+        <p>Projeniz için ücretsiz keşif talebi oluşturun</p>
       </div>
       <form>
         <div class="form-grid">
-          <input type="text" placeholder="Firma Adı" required>
-          <input type="text" placeholder="Yetkili Kişi" required>
-        </div>
-        <div class="form-grid">
-          <input type="email" placeholder="E-posta" required>
-          <input type="tel" placeholder="Telefon" required>
+          <input type="text" placeholder="Ad Soyad / Firma" required>
+          <input type="email" placeholder="E-posta Adresi" required>
         </div>
         <select required>
-          <option value="">Talep Türü Seçiniz</option>
-          <option>Keşif & Danışmanlık</option>
-          <option>Kurulum Talebi</option>
-          <option>Teknik Destek</option>
-          <option>Genel Bilgi</option>
+          <option value="">İlgilendiğiniz Hizmet</option>
+          <option>Yeni Kurulum</option>
+          <option>Teknik Servis</option>
+          <option>Yedek Parça</option>
         </select>
-        <textarea rows="5" placeholder="Talebiniz / Proje Detayı"></textarea>
-        <p class="form-note">Gönder butonuna basarak KVKK kapsamında bilgilerinizin işlenmesini kabul etmiş olursunuz.</p>
-        <button class="btn" type="submit" style="border:none; cursor:pointer; width: 100%;">Talep Gönder</button>
+        <textarea rows="5" placeholder="Mesajınız..."></textarea>
+        <button class="btn" type="submit" style="width: 100%;">Talebi Gönder</button>
       </form>
     </div>
   </section>
@@ -322,110 +361,76 @@
   <div class="footer-grid">
     <div>
       <div class="logo">Mantis Tecno</div>
-      <p style="margin-top:20px; max-width:300px;">Kurumsal firmalar için akıllı otomasyon, içecek ve cihaz çözümleri. Keşiften kuruluma profesyonel hizmet.</p>
+      <p style="margin-top:20px; color:var(--gray);">İstanbul merkezli, Avrupa standartlarında akıllı otomasyon çözümleri sunan teknoloji ortağınız.</p>
     </div>
     <div>
-      <div class="footer-title">İletişim Bilgileri</div>
-      <div class="footer-item">📞 +90 212 000 00 00</div>
-      <div class="footer-item">✉️ info@mantistecno.com</div>
-      <div class="footer-item">📍 İstanbul, Türkiye</div>
+      <div style="font-weight:700; margin-bottom:20px;">İletişim</div>
+      <p style="color:var(--gray); font-size:14px;">✉️ info@mantistecno.com<br>📍 Maslak Plaza, İstanbul</p>
     </div>
     <div>
-      <div class="footer-title">Hızlı Erişim</div>
-      <div class="footer-item"><a href="#services">Hizmetler</a></div>
-      <div class="footer-item"><a href="#devices">Cihazlar</a></div>
-      <div class="footer-item"><a href="#clients">Referanslar</a></div>
-      <div class="footer-item"><a href="#contact">İletişim</a></div>
+      <div style="font-weight:700; margin-bottom:20px;">Navigasyon</div>
+      <p style="font-size:14px;"><a href="#services">Hizmetler</a><br><a href="#devices">Cihazlar</a></p>
     </div>
   </div>
-  <div style="text-align:center; margin-top:60px; font-size:13px; color:#555; border-top:1px solid rgba(255,255,255,0.05); padding-top:30px;">
+  <div style="text-align:center; margin-top:60px; font-size:12px; color:#444; border-top:1px solid rgba(255,255,255,0.05); padding-top:30px;">
     © 2026 Mantis Tecno. Tüm hakları saklıdır.
   </div>
 </footer>
 
 <script>
-    // --- MANTIS PLEXUS ANIMATION ---
+    // --- PLEXUS BACKGROUND ANIMATION ---
     const canvas = document.getElementById('bg-canvas');
     const ctx = canvas.getContext('2d');
     let particles = [];
     const mouse = { x: null, y: null, radius: 150 };
-
-    window.addEventListener('mousemove', (e) => {
-      mouse.x = e.x;
-      mouse.y = e.y;
-    });
+    window.addEventListener('mousemove', (e) => { mouse.x = e.x; mouse.y = e.y; });
 
     class Particle {
       constructor() {
         this.x = Math.random() * canvas.width;
         this.y = Math.random() * canvas.height;
-        this.size = Math.random() * 2 + 1;
+        this.size = Math.random() * 2 + 0.5;
         this.vx = (Math.random() - 0.5) * 0.4;
         this.vy = (Math.random() - 0.5) * 0.4;
       }
       update() {
-        this.x += this.vx;
-        this.y += this.vy;
-
+        this.x += this.vx; this.y += this.vy;
         if (this.x > canvas.width || this.x < 0) this.vx *= -1;
         if (this.y > canvas.height || this.y < 0) this.vy *= -1;
-
-        // Mouse avoidance logic
-        let dx = mouse.x - this.x;
-        let dy = mouse.y - this.y;
-        let distance = Math.sqrt(dx*dx + dy*dy);
-        if (distance < mouse.radius) {
-          if (mouse.x < this.x && this.x < canvas.width - 10) this.x += 2;
-          if (mouse.x > this.x && this.x > 10) this.x -= 2;
-          if (mouse.y < this.y && this.y < canvas.height - 10) this.y += 2;
-          if (mouse.y > this.y && this.y > 10) this.y -= 2;
-        }
       }
       draw() {
-        ctx.fillStyle = 'rgba(22, 163, 74, 0.4)'; // Mantis Yeşili
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        ctx.fill();
+        ctx.fillStyle = 'rgba(22, 163, 74, 0.5)';
+        ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill();
       }
     }
 
     function init() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+      canvas.width = window.innerWidth; canvas.height = window.innerHeight;
       particles = [];
       let count = (canvas.width * canvas.height) / 10000;
-      for (let i = 0; i < count; i++) {
-        particles.push(new Particle());
-      }
+      for (let i = 0; i < count; i++) particles.push(new Particle());
     }
 
     function animate() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       for (let i = 0; i < particles.length; i++) {
-        particles[i].update();
-        particles[i].draw();
-
+        particles[i].update(); particles[i].draw();
         for (let j = i; j < particles.length; j++) {
           let dx = particles[i].x - particles[j].x;
           let dy = particles[i].y - particles[j].y;
           let distance = Math.sqrt(dx*dx + dy*dy);
-
           if (distance < 150) {
-            ctx.strokeStyle = `rgba(22, 163, 74, ${0.2 - distance/750})`; // Bağlantı çizgileri
+            ctx.strokeStyle = `rgba(22, 163, 74, ${0.15 - distance/800})`;
             ctx.lineWidth = 0.5;
-            ctx.beginPath();
-            ctx.moveTo(particles[i].x, particles[i].y);
-            ctx.lineTo(particles[j].x, particles[j].y);
-            ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y); ctx.stroke();
           }
         }
       }
       requestAnimationFrame(animate);
     }
-
     window.addEventListener('resize', init);
-    init();
-    animate();
+    init(); animate();
 </script>
 
 </body>
